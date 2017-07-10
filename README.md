@@ -13,7 +13,7 @@ Docker Tools perf comparison between Linux container, Windows Nano container and
 ### To get perf data on Windows Server Core container
 - Install Docker for Windows
 - Switch Docker for Windows to windows container mode
-- Run "docker pull microsoft/aspnet:4.6.2"
+- Run "build-aspnet-image.cmd" to build the base image
 - Run "./build-fx.ps1" in powershell
 
 
