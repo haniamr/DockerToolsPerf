@@ -1,3 +1,3 @@
-FROM yanchenw/aspnet:4.6.2
+FROM microsoft/aspnet:RS3
 WORKDIR /inetpub/wwwroot
 COPY publish .
