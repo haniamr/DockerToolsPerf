@@ -1,11 +1,5 @@
 function build
 {
-	Write-Host "dotnet restore..." -ForegroundColor Yellow
-	dotnet restore DockerPerf.sln
-
-	Write-Host "dotnet publish..." -ForegroundColor Yellow
-	dotnet publish -o publish
-
 	Write-Host "docker-compose kill..." -ForegroundColor Yellow
 	docker-compose -f docker-compose.yml -p dockerperf kill
 
@@ -38,7 +32,15 @@ function build
 	}
 }
 
-$measure = measure-command { build }
+Write-Host "dotnet restore..." -ForegroundColor Yellow
+dotnet restore DockerPerf.sln
 
+Write-Host "dotnet publish..." -ForegroundColor Yellow
+dotnet publish -o publish
+
+Write-Host "Timer started..." -ForegroundColor Yellow
+$measure = measure-command { build }
+Write-Host "Timer ended." -ForegroundColor Yellow
+Write-Host
 Write-Host "E2E Time: $measure" -ForegroundColor Yellow
 Write-Host "Done!!!"
