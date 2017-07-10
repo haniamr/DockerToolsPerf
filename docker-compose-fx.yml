@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  dockerperffx:
+    image: dockerperffx
+    build:
+      context: ./DockerPerfFx
+      dockerfile: Dockerfile
+    ports:
+      - "80"
+      
+networks:
+  default:
+    external:
+      name: nat

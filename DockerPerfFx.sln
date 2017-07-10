@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26705.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerPerfFx", "DockerPerfFx\DockerPerfFx.csproj", "{290CA4A1-E682-48DD-B480-44AED8C62C5B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{290CA4A1-E682-48DD-B480-44AED8C62C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290CA4A1-E682-48DD-B480-44AED8C62C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290CA4A1-E682-48DD-B480-44AED8C62C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290CA4A1-E682-48DD-B480-44AED8C62C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8307E75D-6B66-4FA2-AA24-0B32842CB39B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8307E75D-6B66-4FA2-AA24-0B32842CB39B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8307E75D-6B66-4FA2-AA24-0B32842CB39B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8307E75D-6B66-4FA2-AA24-0B32842CB39B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66568E5B-3E7A-40F0-9F5F-6221A1E5CA95}
+	EndGlobalSection
+EndGlobal
