@@ -6,6 +6,8 @@ services:
     build:
       context: ./DockerPerfFx
       dockerfile: Dockerfile
+    volumes:
+      - ./DockerPerfFx:C:\inetpub\wwwroot
     ports:
       - "80"
       

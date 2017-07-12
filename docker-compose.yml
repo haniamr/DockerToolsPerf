@@ -7,6 +7,15 @@ services:
       context: ./DockerPerf
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages
+    volumes:
+      - ./DockerPerf:/app
+      - ${USERPROFILE}\.nuget\packages\:/root/.nuget/packages:ro
+      - ${USERPROFILE}\.nuget\packages\:/root/.nuget/fallbackpackages:ro
     ports:
       - "80"
+    entrypoint:
+      - dotnet
+      - --additionalProbingPath
+      - /root/.nuget/fallbackpackages
+      - bin/Debug/netcoreapp1.1/DockerPerf.dll
