@@ -1,24 +1,28 @@
 function build
 {
-	Write-Host "docker-compose kill..." -ForegroundColor Yellow
+	Write-Host "docker-compose -f docker-compose-fx.yml -p dockerperffx kill" -ForegroundColor Yellow
 	$m = measure-command { docker-compose -f docker-compose-fx.yml -p dockerperffx kill }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
-	Write-Host "docker-compose down..." -ForegroundColor Yellow
+	Write-Host "docker-compose -f docker-compose-fx.yml -p dockerperffx down --rmi all --remove-orphans" -ForegroundColor Yellow
 	$m = measure-command { docker-compose -f docker-compose-fx.yml -p dockerperffx down --rmi all --remove-orphans }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 	
-	Write-Host "msbuild /t:DeployOnBuild..." -ForegroundColor Yellow
-	$m = measure-command { msbuild DockerPerfFx.sln }
+	Write-Host "msbuild DockerPerfFx.sln /t:rebuild" -ForegroundColor Yellow
+	$m = measure-command { msbuild DockerPerfFx.sln /t:rebuild }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
-	Write-Host "docker-compose up..." -ForegroundColor Yellow
+	Write-Host "docker-compose -f docker-compose-fx.yml -p dockerperffx up -d --build" -ForegroundColor Yellow
 	$m = measure-command { docker-compose -f docker-compose-fx.yml -p dockerperffx up -d --build }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
-	$id=(docker ps --filter "status=running" --filter "name=dockerperf" --format "{{.ID}}" -n 1)
+	Write-Host "docker ps --filter ""status=running"" --filter ""name=dockerperffx"" --format ""{{.ID}}"" -n 1" -ForegroundColor Yellow
+	$m = measure-command { $id=(docker ps --filter "status=running" --filter "name=dockerperffx" --format "{{.ID}}" -n 1) }
+	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
-	$ip=(docker inspect --format="{{.NetworkSettings.Networks.nat.IPAddress}}" $id)
+	Write-Host "docker inspect --format=""{{.NetworkSettings.Networks.nat.IPAddress}}""" -ForegroundColor Yellow
+	$m = measure-command { $ip=(docker inspect --format="{{.NetworkSettings.Networks.nat.IPAddress}}" $id) }
+	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
 	Write-Host "Pinging http://$ip/" -ForegroundColor Yellow
 	$m = measure-command { 
