@@ -6,12 +6,3 @@ services:
     build:
       context: ./DockerPerfFx
       dockerfile: Dockerfile
-    volumes:
-      - ./DockerPerfFx:C:\inetpub\wwwroot
-    ports:
-      - "80"
-      
-networks:
-  default:
-    external:
-      name: nat

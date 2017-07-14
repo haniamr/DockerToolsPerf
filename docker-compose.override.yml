@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  dockerperf:
+    environment:
+      - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages
+    volumes:
+      - ./DockerPerf:/app
+      - ${USERPROFILE}\.nuget\packages\:/root/.nuget/packages:ro
+      - ${USERPROFILE}\.nuget\packages\:/root/.nuget/fallbackpackages:ro
+    ports:
+      - "80"
+    entrypoint:
+      - dotnet
+      - --additionalProbingPath
+      - /root/.nuget/fallbackpackages
+      - bin/Debug/netcoreapp1.1/DockerPerf.dll

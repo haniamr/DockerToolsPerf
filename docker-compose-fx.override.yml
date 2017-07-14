@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  dockerperffx:
+    ports:
+      - "80"
+    volumes:
+      - ./DockerPerfFx:C:\inetpub\wwwroot
+      - ./Debuggers/Remote Debugger:C:\remote_debugger:ro
+networks:
+  default:
+    external:
+      name: nat
