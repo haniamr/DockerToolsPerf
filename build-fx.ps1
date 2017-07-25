@@ -38,6 +38,11 @@ function build($clean)
 	Write-Host "docker ps --filter ""status=running"" --filter ""name=dockerperffx"" --format ""{{.ID}}"" -n 1" -ForegroundColor Yellow
 	$m = measure-command { $id=(docker ps --filter "status=running" --filter "name=dockerperffx" --format "{{.ID}}" -n 1) }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
+	
+	if ($clean) {
+		Write-Host "docker exec $id C:\PerfView.exe start c:\perf.etl -AcceptEULA -LogFile:C:\perf.log -Zip:True -Merge:True -ThreadTime -NoView -CircularMB:0 -Providers:Microsoft-Windows-IIS"
+		docker exec $id C:\PerfView.exe start c:\perf.etl -AcceptEULA -LogFile:C:\perf.log -Zip:True -Merge:True -ThreadTime -NoView -CircularMB:0
+	}
 
 	# get IP address
 	Write-Host "docker inspect --format=""{{.NetworkSettings.Networks.nat.IPAddress}}"" $id" -ForegroundColor Yellow
@@ -70,6 +75,11 @@ function build($clean)
 		}
 	}
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green
+	
+	if (-not $clean) {
+		Write-Host "docker exec $id C:\PerfView.exe stop -AcceptEULA -LogFile:C:\perf.log -NoView -Providers:Microsoft-Windows-IIS"
+		docker exec $id C:\PerfView.exe stop -AcceptEULA -LogFile:C:\perf.log -NoView
+	}
 }
 
 function codeChange 

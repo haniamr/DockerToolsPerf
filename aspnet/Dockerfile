@@ -5,9 +5,12 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 RUN Add-WindowsFeature Web-Server; \
     Add-WindowsFeature NET-Framework-45-ASPNET; \
     Add-WindowsFeature Web-Asp-Net45; \
+	DISM /online /Enable-Feature /FeatureName:IIS-HttpTracing; \
     Remove-Item -Recurse C:\inetpub\wwwroot\*
 
 ADD ServiceMonitor.exe /
+
+ADD PerfView.exe /
 
 EXPOSE 80
 
