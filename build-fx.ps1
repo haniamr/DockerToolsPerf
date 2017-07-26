@@ -71,7 +71,7 @@ function build($clean)
 			}
 			
 			# cannot decrease this ping, if ping too frequently the container will freeze
-			Start-Sleep 1
+			Start-Sleep 5
 		}
 	}
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green
