@@ -18,8 +18,13 @@ function build($clean)
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 	
 	# build the project
-	Write-Host "msbuild DockerPerfFx.sln /t:rebuild" -ForegroundColor Yellow
-	$m = measure-command { msbuild DockerPerfFx.sln /t:rebuild }
+	if ($clean) {
+		Write-Host "msbuild DockerPerfFx.sln /t:rebuild" -ForegroundColor Yellow
+		$m = measure-command { msbuild DockerPerfFx.sln /t:rebuild }
+	} else {
+		Write-Host "msbuild DockerPerfFx.sln" -ForegroundColor Yellow
+		$m = measure-command { msbuild DockerPerfFx.sln }
+	}
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
 
 	if ($clean) {
