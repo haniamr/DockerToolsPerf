@@ -15,7 +15,7 @@ namespace DockerPerfFx.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application more more description page.";
+            ViewBag.Message = "Your application more more more description page.";
 
             return View();
         }
