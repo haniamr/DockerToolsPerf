@@ -1,0 +1,1 @@
+docker build nano -t perf/aspnetcore:nano
