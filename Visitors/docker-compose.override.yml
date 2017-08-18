@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mycompany.visitors.web:
+    ports:
+      - "80"
+    environment:
+      - DEV_ENVIRONMENT=1 
+  mycompany.visitors.crmsvc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+networks:
+  default:
+    external:
+      name: nat
+
