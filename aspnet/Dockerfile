@@ -10,11 +10,14 @@ RUN Add-WindowsFeature Web-Server; \
 
 ADD ServiceMonitor.exe /
 
+ADD PerfView.exe /
+
 ADD roslyn /roslyn
 
 RUN C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe install c:\roslyn\csc.exe /execonfig:c:\roslyn\csc.exe; \
 	C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe install c:\roslyn\vbc.exe /execonfig:c:\roslyn\vbc.exe; \
-	C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe install c:\roslyn\VBCSCompiler.exe /execonfig:c:\roslyn\VBCSCompiler.exe
+	C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe install c:\roslyn\VBCSCompiler.exe /execonfig:c:\roslyn\VBCSCompiler.exe; \
+	C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe install c:\roslyn\WebGrease.dll /execonfig:c:\roslyn\VBCSCompiler.exe
 
 EXPOSE 80
 
