@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26427.6
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{19FC5CCB-6CA2-4AA1-87AA-6E6B84E16D53}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompany.Visitors.Web", "MyCompany.Visitors.Web\MyCompany.Visitors.Web.csproj", "{A2D2B1B4-A65A-40A1-81B7-2DADA59BB28E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{05A33938-B402-4A82-8446-3A81CB0F5AA1} = {05A33938-B402-4A82-8446-3A81CB0F5AA1}
@@ -20,8 +22,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data and Model", "Data and Model", "{CF2DB505-26D8-4FD4-BC16-539491B71A64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCompany.Visitors.CRMSvc", "MyCompany.Visitors.CRMSvc\MyCompany.Visitors.CRMSvc.csproj", "{8E5F0406-1876-4C24-BA9E-30D102DF9E64}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{19FC5CCB-6CA2-4AA1-87AA-6E6B84E16D53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

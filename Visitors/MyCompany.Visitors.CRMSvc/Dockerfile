@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:1.1-runtime-nanoserver
+FROM perf/aspnetcore:nano
 ENV ASPNETCORE_URLS http://+:81
 ARG source
 WORKDIR /app
