@@ -103,6 +103,9 @@ function codeChange
 Write-Host "nuget restore..." -ForegroundColor Yellow
 .\nuget.exe restore Visitors\MyCompany.Visitors.Server.sln
 
+mkdir -f Visitors\MyCompany.Visitors.Web\empty | out-null
+mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
+
 #
 # First run
 #
