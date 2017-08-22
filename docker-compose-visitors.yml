@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mycompany.visitors.web:
+    image: mycompany.visitors.web
+    build:
+      context: ./Visitors/MyCompany.Visitors.Web
+      dockerfile: Dockerfile
+      args:
+        source: empty/
+    ports:
+      - "80:80"
+      
+  mycompany.visitors.crmsvc:
+    image: mycompany.visitors.crmsvc
+    build:
+      context: ./Visitors/MyCompany.Visitors.CRMSvc
+      dockerfile: Dockerfile
+      args:
+        source: empty/
+    ports:
+      - "81:81"

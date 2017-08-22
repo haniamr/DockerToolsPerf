@@ -1,4 +1,4 @@
-﻿namespace MyCompany.Visitors.Web.Controllers
+namespace MyCompany.Visitors.Web.Controllers
 {
     using System.Web.Mvc;
 

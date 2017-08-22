@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mycompany.visitors.web:
+    volumes:
+      - ./Visitors/MyCompany.Visitors.Web:C:\inetpub\wwwroot
+      - ./Debuggers/Remote Debugger:C:\remote_debugger:ro
+      
+  mycompany.visitors.crmsvc:
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - NUGET_PACKAGES=C:\.nuget\packages
+      - NUGET_FALLBACK_PACKAGES=
+      - DEV_ENVIRONMENT=1
+    volumes:
+      - ./Visitors/MyCompany.Visitors.CRMSvc:C:\app
+      - ${USERPROFILE}\.nuget\packages\:C:\.nuget\packages:ro
+
+networks:
+  default:
+    external:
+      name: nat
