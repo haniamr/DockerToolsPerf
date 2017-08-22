@@ -82,8 +82,12 @@ function codeChange
 #
 # Pre-requisites
 #
-Write-Host "nuget restore..." -ForegroundColor Yellow
+Write-Host "nuget restore..." -ForegroundColor Green
 .\nuget.exe restore Visitors\MyCompany.Visitors.Server.sln
+
+# Clean up old images
+Write-Host "cleaning up..." -ForegroundColor Green
+Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans"
 
 mkdir -f Visitors\MyCompany.Visitors.Web\empty | out-null
 mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
@@ -92,9 +96,6 @@ mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
 # First run
 #
 Write-Host "First Run..." -ForegroundColor Green
-
-# Clean up old images
-Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans"
 
 $e2e = measure-command { 
 	build $true

@@ -77,16 +77,17 @@ function codeChange
 #
 # Pre-requisites
 #
-Write-Host "nuget restore..." -ForegroundColor Yellow
+Write-Host "nuget restore..." -ForegroundColor Green
 .\nuget.exe restore DockerPerfFx.sln
+
+# Clean up old images
+Write-Host "cleaning up..." -ForegroundColor Green
+docker-compose $dockerComposeArgs down --rmi all --remove-orphans
 
 #
 # First run
 #
 Write-Host "First Run..." -ForegroundColor Green
-
-# Clean up old images
-docker-compose $dockerComposeArgs down --rmi all --remove-orphans
 
 $e2e = measure-command { 
 	build $true
