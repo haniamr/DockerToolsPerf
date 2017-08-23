@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  mycompany.visitors.crmsvc:
+    entrypoint: cmd /c "ping -t localhost >nul"
+
