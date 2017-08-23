@@ -81,15 +81,15 @@ function codeChange
 	[System.IO.File]::WriteAllText($codePath, $contents.Replace("Default Index", "Default Index blah"));
 }
 
+# Clean up
+Write-Host "cleaning up..." -ForegroundColor Green
+.\clean.cmd 2>&1 | out-null
+
 #
 # Pre-requisites
 #
 Write-Host "nuget restore..." -ForegroundColor Green
 .\nuget.exe restore Visitors\MyCompany.Visitors.Server_no_compose.sln | out-null
-
-# Clean up old images
-Write-Host "cleaning up..." -ForegroundColor Green
-Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans | out-null"
 
 mkdir -f Visitors\MyCompany.Visitors.Web\empty | out-null
 mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
