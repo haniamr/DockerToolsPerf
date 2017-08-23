@@ -4,6 +4,7 @@ function runAndMeasure($command) {
 	Write-Host $command -ForegroundColor Yellow
 	$m = measure-command { $res = Invoke-Expression $command }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
+	$script:e2e += $m.TotalSeconds
 	
 	return $res
 }
@@ -19,21 +20,21 @@ function build($clean)
 	}
 	
 	# docker-compose config, the result is not used in the script but in VS scenario, just keep this here to mimic the process
-	runAndMeasure "docker-compose $dockerComposeArgs config"
+	runAndMeasure "docker-compose $dockerComposeArgs config | out-null"
 	
 	# build the project
 	if ($clean) {
-		runAndMeasure "msbuild DockerPerfFx.sln /t:rebuild"
+		runAndMeasure "msbuild DockerPerfFx.sln /t:rebuild | out-null"
 	} else {
-		runAndMeasure "msbuild DockerPerfFx.sln"
+		runAndMeasure "msbuild DockerPerfFx.sln | out-null"
 	}
 
 	if ($clean) {
 		# build and start container
-		runAndMeasure "docker-compose $dockerComposeArgs up -d --build"
+		runAndMeasure "docker-compose $dockerComposeArgs up -d --build | out-null"
 	} else {
 		# make sure container is up-to-date by calling docker compose up
-		runAndMeasure "docker-compose $dockerComposeArgs up -d"
+		runAndMeasure "docker-compose $dockerComposeArgs up -d | out-null"
 	}
 	
 	# get container ID
@@ -43,7 +44,7 @@ function build($clean)
 	$ip = runAndMeasure "docker inspect --format=""{{.NetworkSettings.Networks.nat.IPAddress}}"" $id"
 	
 	# start debugger if it is not already started
-	runAndMeasure "docker exec $id powershell -Command if ((Get-Process msvsmon -ErrorAction SilentlyContinue).Count -eq 0) {  Start-Process C:\remote_debugger\msvsmon.exe -ArgumentList /noauth, /anyuser, /silent, /nostatus, /noclrwarn, /nosecuritywarn, /nofirewallwarn, /nowowwarn, /timeout:2147483646}"
+	runAndMeasure "docker exec $id powershell -Command ""& { if ((Get-Process msvsmon -ErrorAction SilentlyContinue).Count -eq 0) {  Start-Process C:\remote_debugger\msvsmon.exe -ArgumentList /noauth, /anyuser, /silent, /nostatus, /noclrwarn, /nosecuritywarn, /nofirewallwarn, /nowowwarn, /timeout:2147483646} } """
 
 	Write-Host "Pinging http://$ip/" -ForegroundColor Yellow
 	$m = measure-command { 
@@ -64,11 +65,7 @@ function build($clean)
 		}
 	}
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green
-	
-	if (-not $clean) {
-		Write-Host "docker exec $id C:\PerfView.exe stop -AcceptEULA -LogFile:C:\perf.log -NoView -Providers:Microsoft-Windows-IIS"
-		docker exec $id C:\PerfView.exe stop -AcceptEULA -LogFile:C:\perf.log -NoView
-	}
+	$script:e2e += $m.TotalSeconds
 }
 
 function codeChange 
@@ -83,23 +80,22 @@ function codeChange
 # Pre-requisites
 #
 Write-Host "nuget restore..." -ForegroundColor Green
-.\nuget.exe restore DockerPerfFx.sln
+.\nuget.exe restore DockerPerfFx.sln | out-null
 
 # Clean up old images
 Write-Host "cleaning up..." -ForegroundColor Green
-docker-compose $dockerComposeArgs down --rmi all --remove-orphans
+Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans | out-null"
 
 #
 # First run
 #
 Write-Host "First Run..." -ForegroundColor Green
 
-$e2e = measure-command { 
-	build $true
-}
+$script:e2e = 0
+build $true
 
 Write-Host
-Write-Host E2E Time: $e2e.Seconds seconds -ForegroundColor Green
+Write-Host E2E Time: $([math]::Round($script:e2e)) seconds -ForegroundColor Green
 Write-Host
 Write-Host
 
@@ -117,11 +113,10 @@ codeChange
 Write-Host "Sleep 30 seconds to avoid file locking issue..." -ForegroundColor Green
 Start-Sleep 30
 
-$e2e = measure-command { 
-	build $false
-}
+$script:e2e = 0
+build $false
 
 Write-Host
-Write-Host E2E Time: $e2e.Seconds seconds -ForegroundColor Green
+Write-Host E2E Time: $([math]::Round($script:e2e)) seconds -ForegroundColor Green
 Write-Host
 Write-Host

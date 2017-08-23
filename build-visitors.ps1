@@ -4,6 +4,7 @@ function runAndMeasure($command) {
 	Write-Host $command -ForegroundColor Yellow
 	$m = measure-command { $res = Invoke-Expression $command }
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green 
+	$script:e2e += $m.TotalSeconds
 	
 	return $res
 }
@@ -19,23 +20,23 @@ function build($clean)
 	}
 	
 	# docker-compose config, the result is not used in the script but in VS scenario, just keep this here to mimic the process
-	runAndMeasure "docker-compose $dockerComposeArgs config"
+	runAndMeasure "docker-compose $dockerComposeArgs config | out-null"
 	
 	# build the project
 	if ($clean) {
-		runAndMeasure "msbuild Visitors/MyCompany.Visitors.Server.sln /t:rebuild"
+		runAndMeasure "msbuild Visitors/MyCompany.Visitors.Server_no_compose.sln /t:rebuild | out-null"
 	} else {
-		runAndMeasure "msbuild Visitors/MyCompany.Visitors.Server.sln"
+		runAndMeasure "msbuild Visitors/MyCompany.Visitors.Server_no_compose.sln | out-null"
 	}
 
 	if ($clean) {
 		# build and start container
-		runAndMeasure "docker-compose $dockerComposeArgs build --force-rm --no-cache"
+		runAndMeasure "docker-compose $dockerComposeArgs build --force-rm --no-cache | out-null"
 		
-		runAndMeasure "docker-compose $dockerComposeArgs up -d"
+		runAndMeasure "docker-compose $dockerComposeArgs up -d | out-null"
 	} else {
 		# make sure container is up-to-date by calling docker compose up
-		runAndMeasure "docker-compose $dockerComposeArgs up -d"
+		runAndMeasure "docker-compose $dockerComposeArgs up -d | out-null"
 	}
 	
 	# get container ID for web project
@@ -69,6 +70,7 @@ function build($clean)
 		}
 	}
 	Write-Host $m.TotalSeconds seconds -ForegroundColor Green
+	$script:e2e += $m.TotalSeconds
 }
 
 function codeChange 
@@ -83,11 +85,11 @@ function codeChange
 # Pre-requisites
 #
 Write-Host "nuget restore..." -ForegroundColor Green
-.\nuget.exe restore Visitors\MyCompany.Visitors.Server.sln
+.\nuget.exe restore Visitors\MyCompany.Visitors.Server_no_compose.sln | out-null
 
 # Clean up old images
 Write-Host "cleaning up..." -ForegroundColor Green
-Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans"
+Invoke-Expression "docker-compose $dockerComposeArgs down --rmi all --remove-orphans | out-null"
 
 mkdir -f Visitors\MyCompany.Visitors.Web\empty | out-null
 mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
@@ -97,12 +99,11 @@ mkdir -f Visitors\MyCompany.Visitors.CRMSvc\empty | out-null
 #
 Write-Host "First Run..." -ForegroundColor Green
 
-$e2e = measure-command { 
-	build $true
-}
+$script:e2e = 0
+build $true
 
 Write-Host
-Write-Host E2E Time: $e2e.Seconds seconds -ForegroundColor Green
+Write-Host E2E Time: $([math]::Round($script:e2e)) seconds -ForegroundColor Green
 Write-Host
 Write-Host
 
@@ -120,11 +121,10 @@ codeChange
 Write-Host "Sleep 30 seconds to avoid file locking issue..." -ForegroundColor Green
 Start-Sleep 30
 
-$e2e = measure-command { 
-	build $false
-}
+$script:e2e = 0
+build $false
 
 Write-Host
-Write-Host E2E Time: $e2e.Seconds seconds -ForegroundColor Green
+Write-Host E2E Time: $([math]::Round($script:e2e)) seconds -ForegroundColor Green
 Write-Host
 Write-Host
