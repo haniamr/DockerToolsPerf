@@ -3,4 +3,6 @@ version: '3'
 services:
   mycompany.visitors.crmsvc:
     entrypoint: cmd /c "ping -t localhost >nul"
-
+    labels:
+      com.microsoft.visualstudio.debuggee.killprogram: "cmd /c dir"
+      com.microsoft.visualstudio.debuggee.program: "\"C:\\Program Files\\dotnet\\dotnet.exe\""
