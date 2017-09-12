@@ -15,7 +15,7 @@ services:
       - ./Visitors/MyCompany.Visitors.CRMSvc:C:\app
       - ${USERPROFILE}\.nuget\packages\:C:\.nuget\packages:ro
     entrypoint:
-        dotnet.exe --additionalProbingPath c:\\.nuget\\packages bin/Debug/netcoreapp1.1/MyCompany.Visitors.CRMSvc.dll
+        cmd /c "dotnet.exe --additionalProbingPath c:\\.nuget\\packages bin/Debug/netcoreapp1.1/MyCompany.Visitors.CRMSvc.dll"
         
 networks:
   default:
