@@ -10,5 +10,3 @@ docker rmi -f mycompany.visitors.crmsvc:dev
 git clean dockerperf/ -fdx
 git clean dockerperffx/ -fdx
 git clean visitors/ -fdx
-
-taskkill /F /IM VBCSCompiler.exe
