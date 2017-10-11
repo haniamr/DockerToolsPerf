@@ -1,6 +1,7 @@
 powershell docker rm -f (docker ps -aq)
 powershell docker rmi -f (docker images -aq -f "dangling=true")
 powershell docker rmi -f (docker images -aq -f "reference=*:dev")
+powershell docker rmi -f (docker images -aq -f "reference=*/*:dev")
 
 docker rmi -f dockerperf:latest
 docker rmi -f dockerperffx:latest
