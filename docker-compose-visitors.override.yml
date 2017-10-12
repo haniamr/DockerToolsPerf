@@ -6,7 +6,6 @@ services:
       - DEV_ENVIRONMENT=1
     volumes:
       - ./Visitors/MyCompany.Visitors.Web:C:\inetpub\wwwroot
-      - ./Debuggers/Remote Debugger:C:\remote_debugger:ro
       
   mycompany.visitors.crmsvc:
     environment:

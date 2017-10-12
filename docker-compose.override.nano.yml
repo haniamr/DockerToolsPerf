@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  dockerperf:
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - NUGET_PACKAGES=C:\.nuget\packages
+      - NUGET_FALLBACK_PACKAGES=
+    volumes:
+      - ./DockerPerf:C:\app
+      - ./Tools:C:\tools
+      - ${USERPROFILE}\.nuget\packages\:C:\.nuget\packages:ro
+    ports:
+      - "80"
+    entrypoint: ping -t localhost
+
+networks:
+  default:
+    external:
+      name: nat

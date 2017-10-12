@@ -42,9 +42,6 @@ function build($clean)
 
 	# get IP address
 	$ip = runAndMeasure "docker inspect --format=""{{.NetworkSettings.Networks.nat.IPAddress}}"" $id"
-	
-	# start debugger if it is not already started
-	runAndMeasure "docker exec $id powershell -Command ""& { if ((Get-Process msvsmon -ErrorAction SilentlyContinue).Count -eq 0) {  Start-Process C:\remote_debugger\msvsmon.exe -ArgumentList /noauth, /anyuser, /silent, /nostatus, /noclrwarn, /nosecuritywarn, /nofirewallwarn, /nowowwarn, /timeout:2147483646} } """
 
 	Write-Host "Pinging http://$ip/" -ForegroundColor Yellow
 	$m = measure-command { 

@@ -10,8 +10,4 @@ services:
       - ${USERPROFILE}\.nuget\packages\:/root/.nuget/fallbackpackages:ro
     ports:
       - "80"
-    entrypoint:
-      - dotnet
-      - --additionalProbingPath
-      - /root/.nuget/fallbackpackages
-      - bin/Debug/netcoreapp1.1/DockerPerf.dll
+    entrypoint: tail -f /dev/null
