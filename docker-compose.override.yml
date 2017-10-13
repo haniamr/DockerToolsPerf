@@ -3,11 +3,12 @@ version: '3'
 services:
   dockerperf:
     environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
       - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages
     volumes:
       - ./DockerPerf:/app
       - ${USERPROFILE}\.nuget\packages\:/root/.nuget/packages:ro
-      - ${USERPROFILE}\.nuget\packages\:/root/.nuget/fallbackpackages:ro
+      - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:/root/.nuget/fallbackpackages:ro
     ports:
       - "80"
     entrypoint: tail -f /dev/null

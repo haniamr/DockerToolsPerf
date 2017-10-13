@@ -5,11 +5,12 @@ services:
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - NUGET_PACKAGES=C:\.nuget\packages
-      - NUGET_FALLBACK_PACKAGES=
+      - NUGET_FALLBACK_PACKAGES=c:\.nuget\fallbackpackages
     volumes:
       - ./DockerPerf:C:\app
       - ./Tools:C:\tools
       - ${USERPROFILE}\.nuget\packages\:C:\.nuget\packages:ro
+      - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:c:\.nuget\fallbackpackages:ro
     ports:
       - "80"
     entrypoint: ping -t localhost

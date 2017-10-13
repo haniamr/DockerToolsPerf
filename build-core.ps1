@@ -34,7 +34,7 @@ function getAppUrl($id) {
 
 function killExistingDotnetProcess($id) {
     if ($platform -eq "Linux") {
-        runAndMeasure "docker exec $id /bin/bash -c ""pkill dotnet"""
+        runAndMeasure "docker exec $id /bin/bash -c ""kill ```$(pidof -x dotnet)"""
     } else {
         runAndMeasure "docker exec $id C:\\Tools\\KillProcess.exe dotnet.exe"
     }
@@ -42,9 +42,9 @@ function killExistingDotnetProcess($id) {
 
 function startDotnetApplication($id) {
     if ($platform -eq "Linux") {
-		runAndMeasure "docker exec -d $id dotnet --additionalProbingPath /root/.nuget/fallbackpackages bin/Debug/netcoreapp1.1/DockerPerf.dll"
+        runAndMeasure "docker exec -d $id dotnet --additionalProbingPath /root/.nuget/packages --additionalProbingPath /root/.nuget/fallbackpackages bin/Debug/netcoreapp2.0/DockerPerf.dll"
     } else {
-		runAndMeasure "docker exec -d $id dotnet --additionalProbingPath C:\\.nuget\\packages bin\\Debug\\netcoreapp1.1\\DockerPerf.dll"
+        runAndMeasure "docker exec -d $id dotnet --additionalProbingPath c:\\.nuget\\packages --additionalProbingPath C:\\.nuget\\fallbackpackages bin\\Debug\\netcoreapp2.0\\DockerPerf.dll"
     }
 }
 
@@ -78,15 +78,15 @@ function build($clean)
     if ($clean) {
         runAndMeasure "msbuild .\DockerPerf.sln /t:rebuild | out-null"
     } else {
-		# kill existing dotnet process inside the running container
-		killExistingDotnetProcess $id
-		
-		# rebuild the project
-        runAndMeasure "msbuild .\DockerPerf.sln"
+        # kill existing dotnet process inside the running container
+        killExistingDotnetProcess $id
+        
+        # rebuild the project
+        runAndMeasure "msbuild .\DockerPerf.sln | out-null"
     }
-	
-	# start dotnet application inside running container
-	startDotnetApplication $id
+    
+    # start dotnet application inside running container
+    startDotnetApplication $id
 
     # get application URL for web project
     $url = getAppUrl $id
@@ -106,7 +106,7 @@ function build($clean)
             catch
             {
             }
-            Start-Sleep 0.2
+            Start-Sleep -m 200
         }
     }
     Write-Host $m.TotalSeconds seconds -ForegroundColor Green
@@ -130,6 +130,12 @@ Write-Host "cleaning up..." -ForegroundColor Green
 #
 Write-Host "dotnet restore..." -ForegroundColor Yellow
 dotnet restore DockerPerf.sln | out-null
+
+
+if ($platform -eq "Linux") {
+    docker pull microsoft/aspnetcore:2.0
+    docker tag microsoft/aspnetcore:2.0 perf/aspnetcore:2.0
+}
 
 #
 # First run

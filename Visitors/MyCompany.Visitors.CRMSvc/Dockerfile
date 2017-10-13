@@ -1,4 +1,4 @@
-FROM perf/aspnetcore:nano
+FROM perf/aspnetcore:2.0
 ENV ASPNETCORE_URLS http://+:81
 ARG source
 WORKDIR /app

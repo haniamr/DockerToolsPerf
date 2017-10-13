@@ -10,12 +10,15 @@ services:
   mycompany.visitors.crmsvc:
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - NUGET_PACKAGES=C:\.nuget\packages
+      - NUGET_FALLBACK_PACKAGES=c:\.nuget\fallbackpackages
     volumes:
       - ./Visitors/MyCompany.Visitors.CRMSvc:C:\app
       - ${USERPROFILE}\.nuget\packages\:C:\.nuget\packages:ro
+      - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:c:\.nuget\fallbackpackages:ro
     entrypoint:
-        cmd /c "dotnet.exe --additionalProbingPath c:\\.nuget\\packages bin/Debug/netcoreapp1.1/MyCompany.Visitors.CRMSvc.dll"
-        
+        cmd /c "dotnet.exe --additionalProbingPath c:\\.nuget\\packages --additionalProbingPath c:\\.nuget\\fallbackpackages bin/Debug/netcoreapp2.0/MyCompany.Visitors.CRMSvc.dll"
+
 networks:
   default:
     external:

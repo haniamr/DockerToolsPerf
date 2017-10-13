@@ -1,1 +1,1 @@
-docker build nano -t perf/aspnetcore:nano
+docker build nano -t perf/aspnetcore:2.0
